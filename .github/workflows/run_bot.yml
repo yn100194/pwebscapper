@@ -30,13 +30,11 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    # Bước 4: Chạy file Python và truyền các biến môi trường từ GitHub Secrets vào
+    # Bước 4: Chạy file Python và truyền các biến môi trường
     - name: Run script
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-	# Lấy từ mục Variables (Công khai)
         DELAY_MIN: ${{ vars.DELAY_MIN }}
         DELAY_MAX: ${{ vars.DELAY_MAX }}
       run: python az_scapper.py
-
