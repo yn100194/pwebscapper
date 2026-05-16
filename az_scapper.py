@@ -26,6 +26,8 @@ SCRAPER_API_KEY=os.getenv('SCRAPER_API_KEY')
 DELAY_MIN = float(os.getenv('DELAY_MIN', 1.0))
 DELAY_MAX = float(os.getenv('DELAY_MAX', 3.0))
 
+DOMAIN=os.getenv('AZ_DOMAIN')
+
 if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
     print("❌ Thiếu cấu hình trong file .env!", file=sys.stderr)
     sys.exit(1)
@@ -44,8 +46,8 @@ async def send_telegram_message(message):
         print(f"❌ Lỗi gửi Telegram: {e}", file=sys.stderr)
 
 
-def scrape_aznude():
-    url = 'https://www.aznude.com/'
+def scrape_url():
+    url = DOMAIN
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
@@ -80,7 +82,7 @@ def scrape_aznude():
                 video_data = {}
                 a_tag = item.find('a')
                 if a_tag:
-                    video_data['video_url'] = 'https://www.aznude.com' + a_tag['href'] if a_tag.get('href') else '#'
+                    video_data['video_url'] = DOMAIN + a_tag['href'] if a_tag.get('href') else '#'
                     video_data['thumbnail_url'] = a_tag['data-thumb'] if a_tag.get('data-thumb') else None
 
                 img_tag = item.find('img')
@@ -99,7 +101,7 @@ def scrape_aznude():
                     for a in celebs_div.find_all('a'):
                         name = a.text.strip()
                         href = a.get('href', '')
-                        link = 'https://www.aznude.com' + href if href else '#'
+                        link = DOMAIN + href if href else '#'
                         celebs_list.append((name, link))
                     video_data['celebrities'] = celebs_list
                 else:
@@ -110,7 +112,7 @@ def scrape_aznude():
 
 
 async def main():
-    videos = scrape_aznude()
+    videos = scrape_url()
     if videos:
         await send_telegram_message(f"🔥 <b>CẬP NHẬT {len(videos)} VIDEO XU HƯỚNG</b>")
         

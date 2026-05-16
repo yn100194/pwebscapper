@@ -36,6 +36,9 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+        AZ_DOMAIN: ${{ secrets.AZ_DOMAIN }}
+        AV_DOMAIN: ${{ secrets.AV_DOMAIN }}
+        DOMAIN: ${{ secrets.DOMAIN }}
         DELAY_MIN: ${{ vars.DELAY_MIN }}
         DELAY_MAX: ${{ vars.DELAY_MAX }}
       run: python az_scapper.py
