@@ -4,7 +4,7 @@ on:
   schedule:
     # Cấu hình thời gian chạy bằng CRON (Giờ UTC)
     # Ví dụ dưới đây: Chạy vào lúc 00:00 và 12:00 giờ UTC mỗi ngày (tức là 7h sáng và 19h tối giờ Việt Nam)
-    - cron: '0 0,12 * * *'
+    - cron: '45 8 * * *'
   
   # Giúp bạn có thể bấm nút "Run workflow" bằng tay trên giao diện web bất cứ lúc nào để test
   workflow_dispatch:
