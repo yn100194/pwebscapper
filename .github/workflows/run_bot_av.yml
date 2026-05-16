@@ -40,6 +40,7 @@ jobs:
         AZ_DOMAIN: ${{ secrets.AZ_DOMAIN }}
         AV_DOMAIN: ${{ secrets.AV_DOMAIN }}
         DOMAIN: ${{ secrets.DOMAIN }}
+        CRAWL_PATH: ${{ secrets.CRAWL_PATH }}
         DELAY_MIN: ${{ vars.DELAY_MIN }}
         DELAY_MAX: ${{ vars.DELAY_MAX }}
       run: python av_scapper.py
