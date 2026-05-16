@@ -1,4 +1,4 @@
-name: Run Scraper Bot Periodic
+name: Run Scraper Bot Periodic AV
 
 on:
   schedule:
