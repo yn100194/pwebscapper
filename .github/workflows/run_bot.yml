@@ -1,0 +1,42 @@
+name: Run Scraper Bot Periodic
+
+on:
+  schedule:
+    # Cấu hình thời gian chạy bằng CRON (Giờ UTC)
+    # Ví dụ dưới đây: Chạy vào lúc 00:00 và 12:00 giờ UTC mỗi ngày (tức là 7h sáng và 19h tối giờ Việt Nam)
+    - cron: '0 0,12 * * *'
+  
+  # Giúp bạn có thể bấm nút "Run workflow" bằng tay trên giao diện web bất cứ lúc nào để test
+  workflow_dispatch:
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Bước 1: Khởi tạo code từ repo vào máy ảo
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Bước 2: Cài đặt môi trường Python
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    # Bước 3: Cài đặt các thư viện cần thiết
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    # Bước 4: Chạy file Python và truyền các biến môi trường từ GitHub Secrets vào
+    - name: Run script
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+	# Lấy từ mục Variables (Công khai)
+        DELAY_MIN: ${{ vars.DELAY_MIN }}
+        DELAY_MAX: ${{ vars.DELAY_MAX }}
+      run: python az_scapper.py
+
