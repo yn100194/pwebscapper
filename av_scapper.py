@@ -2,7 +2,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import telegram
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup  # Thêm để làm nút bấm
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup 
 import asyncio
 import random
 from dotenv import load_dotenv
@@ -11,13 +11,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 config_path = os.path.join(BASE_DIR, 'config.env')
 env_path = os.path.join(BASE_DIR, '.env')
 
-# Load cấu hình từ file .env hoặc config.env
 if os.path.exists(config_path):
     load_dotenv(config_path)
 else:
     load_dotenv(env_path)
 
-# Lấy các giá trị cấu hình từ biến môi trường
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 DOMAIN = os.getenv('DOMAIN', 'https://xxx.com')
@@ -30,10 +28,9 @@ SCRAPER_API_KEY=os.getenv('SCRAPER_API_KEY')
 DOMAIN=os.getenv('AV_DOMAIN')
 
 
-async def send_telegram_message(bot_token, chat_id, message, image_url=None, action_url=None, action_text="Xem chi tiết 🌐"):
+async def send_telegram_message(bot_token, chat_id, message, image_url=None, action_url=None, action_text="Detail 🌐"):
     bot = telegram.Bot(token=bot_token)
     
-    # Tạo nút bấm (Inline Keyboard) dưới tin nhắn nếu có link hành động
     reply_markup = None
     if action_url:
         keyboard = [[InlineKeyboardButton(text=action_text, url=action_url)]]
@@ -113,22 +110,20 @@ async def process_path(path):
         print(f"Found {len(models_data)} models in {path}.")
 
         for i, model in enumerate(models_data):
-            # Định dạng tin nhắn bằng Markdown cho chuyên nghiệp và gọn gàng hơn
             message = (
-                f"🌟 *THÔNG TIN IDOL* 🌟\n"
+                f"🌟 *IDOL* 🌟\n"
                 f"⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n"
-                f"👤 *Tên:* `{model['name']}`\n"
-                f"📂 *Danh mục:* `{path.strip('/')}`\n"
+                f"👤 *Name:* `{model['name']}`\n"
+                f"📂 *Category:* `{path.strip('/')}`\n"
             )
             
-            # Gửi kèm link profile vào nút bấm
             await send_telegram_message(
                 bot_token=TELEGRAM_BOT_TOKEN, 
                 chat_id=TELEGRAM_CHAT_ID, 
                 message=message, 
                 image_url=model['image_url'],
                 action_url=model['profile_url'],
-                action_text="Xem Profile Idol ✨"
+                action_text="Watch Profile Idol ✨"
             )
 
             if i < len(models_data) - 1:
@@ -145,7 +140,6 @@ async def main():
         print("Error: TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID missing.")
         return
 
-    # Chạy các path đồng thời bằng asyncio.gather
     tasks = [process_path(path.strip()) for path in CRAWL_PATHS]
     await asyncio.gather(*tasks)
 
