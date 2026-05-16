@@ -21,6 +21,7 @@ else:
 # Cấu hình lấy từ môi trường
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
+SCRAPER_API_KEY=os.getenv('SCRAPER_API_KEY')
 
 DELAY_MIN = float(os.getenv('DELAY_MIN', 1.0))
 DELAY_MAX = float(os.getenv('DELAY_MAX', 3.0))
@@ -59,7 +60,9 @@ def scrape_aznude():
         'Cache-Control': 'max-age=0'
     }
     try:
-        response = requests.get(url, headers=headers, timeout=15)
+        proxy_url = f"http://api.scraperapi.com?api_key={SCRAPER_API_KEY}&url={url}"
+#        response = requests.get(url, headers=headers, timeout=15)
+        response = requests.get(proxy_url, timeout=30)
         response.raise_for_status()
     except Exception as e:
         print(f"❌ Lỗi tải trang web: {e}", file=sys.stderr)
